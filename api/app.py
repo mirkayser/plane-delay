@@ -1,3 +1,5 @@
+"""Api serving model predicting if plane will be delayed."""
+
 import pickle5
 from flask import Flask, request
 from flask_restful import abort, Api, Resource
@@ -6,15 +8,20 @@ import numpy as np
 import settings
 
 
+# init Flask Api
 app = Flask(__name__)
 api = Api(app)
 
+# load pickled model
 with open("./pickle_model.pkl", "rb") as f:
     clf = pickle5.load(f)
 
 
+# create resources
 class ClassifierApi(Resource):
-    def get(self):
+    """Resource to predict if plane will be delayed."""
+
+    def get(self) -> dict:
         params = request.get_json()
 
         x = np.array(params.get("x")).reshape(1, -1)
@@ -24,6 +31,7 @@ class ClassifierApi(Resource):
         return {"prediction": prediction.tolist(), "probability": probability.tolist()}
 
 
+# register paths
 api.add_resource(ClassifierApi, "/predict")
 
 
