@@ -24,7 +24,7 @@ class ClassifierApi(Resource):
         return {"prediction": prediction.tolist(), "probability": probability.tolist()}
 
 
-api.add_resource(ClassifierApi, "/")
+api.add_resource(ClassifierApi, "/predict")
 
 
 if __name__ == "__main__":

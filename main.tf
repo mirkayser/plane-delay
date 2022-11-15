@@ -14,11 +14,11 @@ resource "aws_ecs_cluster" "plane_delay_cluster" {
 }
 
 resource "aws_ecs_task_definition" "plane_delay_task" {
-  family = "delay-plane-task"
+  family = "plane-delay-task"
   container_definitions = <<DEFINITION
   [
     {
-      "name": "delay-plane-task",
+      "name": "plane-delay-task",
       "image": "${aws_ecr_repository.plane_delay.repository_url}",
       "essential": true,
       "portMappings": [
@@ -27,6 +27,14 @@ resource "aws_ecs_task_definition" "plane_delay_task" {
           "hostPort": 80
         }
       ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/plane-delay-task",
+          "awslogs-region": "us-east-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
       "memory": 512,
       "cpu": 256
     }
